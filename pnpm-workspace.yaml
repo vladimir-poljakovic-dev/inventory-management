@@ -1,0 +1,11 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+
+# pnpm blocks dependency lifecycle (postinstall) scripts by default.
+# Allowlist the packages that legitimately build/fetch a native addon:
+#   - bcrypt: password hashing (native binding)
+#   - sharp:  Next.js image optimization (native binding)
+allowBuilds:
+  bcrypt: true
+  sharp: true
