@@ -10,6 +10,6 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo",
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*"], //, "../../packages/types/src/dto/category.dto.ts
   "exclude": ["node_modules", "dist"]
 }
