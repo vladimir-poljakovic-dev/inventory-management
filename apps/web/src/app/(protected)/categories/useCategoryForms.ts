@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { getApiErrorMessage } from "@/lib/api";
-import { Category } from "@/lib/categories";
-import { CreateCategoryDto, UpdateCategoryDto } from "@repo/types";
+import { CreateCategoryDto, UpdateCategoryDto, type Category } from "@repo/types";
 
 export function useCategoryForms(
     onCreate: (dto: CreateCategoryDto)=>Promise<void>,
@@ -23,6 +22,7 @@ export function useCategoryForms(
     //Delete
     const [deleteId, setDeleteId] = useState<string | null>(null);
     const [deleteLoading, setDeleteLoading] = useState(false);
+    const [deleteError, setDeleteError] = useState(``);
 
     async function handleCreate(e: React.SubmitEvent) {
         e.preventDefault();
@@ -66,13 +66,18 @@ export function useCategoryForms(
     async function handleDelete() {
         if(!deleteId) return;
         setDeleteLoading(true);
+        setDeleteError(``);
+
         try{
             await onDelete(deleteId);
             setDeleteId(null);
         }catch(err){
+            setDeleteError(getApiErrorMessage(err));
+        }finally{
             setDeleteLoading(false);
         }
     }
+
     return {
         // Create
         showCreate, setShowCreate, 
@@ -89,6 +94,7 @@ export function useCategoryForms(
         // Delete
         deleteId, setDeleteId,
         deleteLoading,
+        deleteError,
         handleDelete,
 
 

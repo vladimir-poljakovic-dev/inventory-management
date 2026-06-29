@@ -30,7 +30,10 @@ export default function CategoriesPage() {
 
       {forms.showCreate && <CategoryForm title="New Category" name={forms.createName} description={forms.createDescription} loading={forms.createLoading} error={forms.createError} onChangeName={forms.setCreateName} onChangeDescription={forms.setCreateDescription} onSubmit={forms.handleCreate} onCancel={() => forms.setShowCreate(false)} submitLabel="Create" />}
       {forms.editCategory && <CategoryForm title="Edit Category" name={forms.editName} description={forms.editDescription} loading={forms.editLoading} error={forms.editError} onChangeName={forms.setEditName} onChangeDescription={forms.setEditDescription} onSubmit={forms.handleEdit} onCancel={() => forms.setEditCategory(null)} submitLabel="Save" />}
-      {forms.deleteId && <DeleteModal loading={forms.deleteLoading} onConfirm={forms.handleDelete} onCancel={() => forms.setDeleteId(null)} />}
+      {forms.deleteId && <DeleteModal loading={forms.deleteLoading} 
+      error={forms.deleteError}
+      onConfirm={forms.handleDelete} 
+      onCancel={() => forms.setDeleteId(null)} />}
 
     </main>
   );

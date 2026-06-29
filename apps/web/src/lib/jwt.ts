@@ -1,15 +1,27 @@
 import { JwtPayload, Role } from "@repo/types";
 import { getToken } from "./auth";
 
-export function getRole(): Role | null {
-    const token = getToken();
-    if (!token) return null;
-    try {
-        const payload = JSON.parse(atob(token.split('.')[1])) as JwtPayload;
-        return payload.role;
+
+function decodeJwtPayload(token: string): JwtPayload | null {
+    try{
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const padded = base64.padEnd(base64.length +(4 - (base64.length % 4)) %4, '=');
+        return JSON.parse(atob(padded)) as JwtPayload;
     }catch {
         return null;
     }
+}
+
+
+
+
+export function getRole(): Role | null {
+    const token = getToken();
+    if (!token) return null;
+    const payload = decodeJwtPayload(token);
+    return payload?.role ?? null;
+    
 }
 
 export function isAdmin(): boolean {
