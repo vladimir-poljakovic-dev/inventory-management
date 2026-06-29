@@ -1,4 +1,4 @@
-import { Category } from "@/lib/categories";
+import { type Category } from "@repo/types";
 
 interface Props {
     categories: Category[];

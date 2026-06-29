@@ -1,7 +1,8 @@
 import { CreateCategoryDto, UpdateCategoryDto } from "@repo/types";
 import { useEffect, useState } from "react";
 import { getApiErrorMessage } from "@/lib/api";
-import { categoriesApi, Category } from "@/lib/categories";
+import { categoriesApi } from "@/lib/categories";
+import { type Category } from "@repo/types";
 
 export function useCategories(){
     const [categories, setCategories] = useState<Category[]>([]);
