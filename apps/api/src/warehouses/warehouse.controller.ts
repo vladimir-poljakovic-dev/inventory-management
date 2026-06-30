@@ -3,7 +3,7 @@ import { CreateWarehouseDto, UpdateWarehouseDto, Role } from '@repo/types';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Warehouse } from './warehouse.entity';
 import { WarehouseService } from './warehouse.service';
-import { W } from 'typeorm';
+
 
 @Controller('warehouses')
 export class WarehousesController {
