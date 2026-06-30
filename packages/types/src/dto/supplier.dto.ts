@@ -35,3 +35,13 @@ export class UpdateSupplierDto {
     @IsOptional()
     address?: string;
 }
+
+export interface Supplier {
+    id: string;
+    name: string;
+    contactEmail: string;
+    phone: string | null;
+    address: string | null;
+    createdAt: string;
+    updatedAt: string;
+  }
