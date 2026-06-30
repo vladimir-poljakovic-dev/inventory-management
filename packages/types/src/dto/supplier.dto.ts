@@ -19,6 +19,7 @@ export class CreateSupplierDto {
 
 export class UpdateSupplierDto {
     @IsString()
+    @IsOptional()
     @MinLength(2)
     name?:string;
 

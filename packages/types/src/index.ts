@@ -4,5 +4,5 @@ export type { AuthResponseDto } from './dto/auth.dto';
 export type { JwtPayload } from './interfaces/jwt-payload.interface';
 export { CreateCategoryDto, UpdateCategoryDto } from './dto/category.dto';
 export {CreateSupplierDto, UpdateSupplierDto} from './dto/supplier.dto';
-export { Category } from './dto/category.dto';
-export {Supplier} from './dto/supplier.dto';
+export type { Category } from './dto/category.dto';
+export type {Supplier} from './dto/supplier.dto';
