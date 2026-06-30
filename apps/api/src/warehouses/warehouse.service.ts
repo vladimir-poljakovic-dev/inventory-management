@@ -18,7 +18,7 @@ export class WarehouseService {
     async findOne(id: string): Promise<Warehouse> {
         const warehouse = await this.warehousesRepository.findOne({where: {id}});
         if (!warehouse) throw new NotFoundException(`Warehouse #${id} not found`);
-        return this.warehousesRepository.save(warehouse);
+        return warehouse;
     }
 
     create(dto:CreateWarehouseDto):Promise<Warehouse>{
