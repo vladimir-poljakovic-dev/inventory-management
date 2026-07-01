@@ -26,12 +26,14 @@ export function useCategories(){
         }
     }
 
-    async function createCategory(dto:CreateCategoryDto) {
+    async function createCategory(values: Record<string, string>) {
+        const dto: CreateCategoryDto = { name: values.name, description: values.description || undefined };
         await categoriesApi.create(dto);
         fetchCategories();
-    }
-
-    async function updateCategory(id: string, dto: UpdateCategoryDto) {
+      }
+    
+      async function updateCategory(id: string, values: Record<string, string>) {
+        const dto: UpdateCategoryDto = { name: values.name, description: values.description || undefined };
         await categoriesApi.update(id, dto);
         fetchCategories();
     }
