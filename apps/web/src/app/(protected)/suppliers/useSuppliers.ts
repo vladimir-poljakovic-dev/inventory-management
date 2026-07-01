@@ -1,24 +1,20 @@
-import { useEffect, useState } from "react";
-import { getApiErrorMessage } from "@/lib/api";
-import { suppliersApi } from "@/lib/suppliers";
-import { type Supplier, CreateSupplierDto, UpdateSupplierDto } from "@repo/types";
+import { useEffect, useState } from 'react';
+import { getApiErrorMessage } from '@/lib/api';
+import { suppliersApi } from '@/lib/suppliers';
+import { type Supplier, CreateSupplierDto, UpdateSupplierDto } from '@repo/types';
 
 export function useSuppliers() {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
-  useEffect(() => {
-    fetchSuppliers();
-  }, []);
+  useEffect(() => { fetchSuppliers(); }, []);
 
   async function fetchSuppliers() {
     setLoading(true);
-    setError("");
-
+    setError('');
     try {
-      const data = await suppliersApi.getAll();
-      setSuppliers(data);
+      setSuppliers(await suppliersApi.getAll());
     } catch (err) {
       setError(getApiErrorMessage(err));
     } finally {
@@ -26,12 +22,24 @@ export function useSuppliers() {
     }
   }
 
-  async function createSupplier(dto: CreateSupplierDto) {
+  async function createSupplier(values: Record<string, string>) {
+    const dto: CreateSupplierDto = {
+      name: values.name,
+      contactEmail: values.contactEmail,
+      phone: values.phone || undefined,
+      address: values.address || undefined,
+    };
     await suppliersApi.create(dto);
     fetchSuppliers();
   }
 
-  async function updateSupplier(id: string, dto: UpdateSupplierDto) {
+  async function updateSupplier(id: string, values: Record<string, string>) {
+    const dto: UpdateSupplierDto = {
+      name: values.name,
+      contactEmail: values.contactEmail,
+      phone: values.phone || undefined,
+      address: values.address || undefined,
+    };
     await suppliersApi.update(id, dto);
     fetchSuppliers();
   }
@@ -41,12 +49,5 @@ export function useSuppliers() {
     fetchSuppliers();
   }
 
-  return {
-    suppliers,
-    loading,
-    error,
-    createSupplier,
-    updateSupplier,
-    deleteSupplier,
-  };
+  return { suppliers, loading, error, createSupplier, updateSupplier, deleteSupplier };
 }

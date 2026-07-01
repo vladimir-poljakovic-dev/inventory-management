@@ -19,18 +19,20 @@ export default function DashboardPage() {
       <div className="mb-8 flex items-center justify-between">
         <h1 className="text-3xl font-semibold ">Dashboard</h1>
         <div className="flex gap-2">
-        <button
-          onClick={handleLogout}
-          className="rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100"
-        >
-          Log out
-        </button>
         <Link href="/categories" className="rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100">
           Categories
         </Link>
         <Link href="/suppliers" className="rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100">
           Suppliers
         </Link>
+        <Link href="/warehouses" className="rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100">
+          Warehouses
+        </Link>
+        <button
+          onClick={handleLogout}
+          className="rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100">
+          Log out
+        </button>
         </div>
       </div>
       <p className="text-gray-600">Welcome to Inventory Management.</p>
