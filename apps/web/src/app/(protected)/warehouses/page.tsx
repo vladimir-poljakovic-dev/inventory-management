@@ -49,7 +49,6 @@ export default function WarehousesPage() {
 
       {forms.showCreate && <EntityForm title="New Warehouse" fields={FIELDS} values={forms.createValues} loading={forms.createLoading} error={forms.createError} onChange={forms.changeCreate} onSubmit={forms.handleCreate} onCancel={() => forms.setShowCreate(false)} submitLabel="Create" />}
       {forms.editItem && <EntityForm title="Edit Warehouse" fields={FIELDS} values={forms.editValues} loading={forms.editLoading} error={forms.editError} onChange={forms.changeEdit} onSubmit={forms.handleEdit} onCancel={() => forms.setEditItem(null)} submitLabel="Save" />}
-      {forms.deleteId && <DeleteModal loading={forms.deleteLoading} onConfirm={forms.handleDelete} onCancel={() => forms.setDeleteId(null)} />}
-    </main>
+      {forms.deleteId && <DeleteModal loading={forms.deleteLoading} error={forms.deleteError} onConfirm={forms.handleDelete} onCancel={() => forms.setDeleteId(null)} />}    </main>
   );
 }
