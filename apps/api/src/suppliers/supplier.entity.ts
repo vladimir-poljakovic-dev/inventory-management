@@ -15,4 +15,3 @@ export class Supplier extends BaseEntity {
     @Column({nullable:true})
     address: string;
 }
-
