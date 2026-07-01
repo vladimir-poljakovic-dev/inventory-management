@@ -8,3 +8,5 @@ export type { Category } from './dto/category.dto';
 export type { Supplier } from './dto/supplier.dto';
 export { CreateWarehouseDto, UpdateWarehouseDto } from './dto/warehouse.dto';
 export type { WareHouse } from './dto/warehouse.dto';
+export { CreateProductDto, UpdateProductDto } from './dto/product.dto';
+export type { Product } from './dto/product.dto';
