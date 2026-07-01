@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, Min, MinLength } from "class-validator";
+import { type Category } from "./category.dto";
 
 export interface Product {
     id: string,
@@ -6,10 +7,7 @@ export interface Product {
     sku: string;
     description: string | null;
     price: number;
-    category: {
-        id: string;
-        name: string;
-    };
+    category: Category;
     createdAt: string;
     updatedAt: string;
 }

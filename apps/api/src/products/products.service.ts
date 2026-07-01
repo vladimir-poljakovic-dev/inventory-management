@@ -12,8 +12,10 @@ export class ProductService {
     ) {}
 
     findAll(categoryId?: string): Promise<Product[]> {
-        if (!categoryId) {
-            return this.productRepository.find({where: { categoryId }});
+        if (categoryId) {
+            return this.productRepository.find({
+                where: { categoryId }
+            });
         }
         return this.productRepository.find();
     }
