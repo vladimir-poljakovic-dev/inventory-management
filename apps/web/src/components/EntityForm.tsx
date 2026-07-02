@@ -4,6 +4,7 @@ interface Field {
     required?: boolean;
     type?: 'text' | 'select';
     options?: { value: string; label: string }[];
+    maxLength?: number;
   }
   
   interface Props {
@@ -44,6 +45,7 @@ interface Field {
                   required={field.required}
                   value={values[field.name] ?? ''}
                   onChange={(e) => onChange(field.name, e.target.value)}
+                  maxLength={field.maxLength}
                   className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-gray-900 focus:outline-none"
                 />
               )}

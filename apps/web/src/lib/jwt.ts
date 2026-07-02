@@ -28,6 +28,13 @@ export function isAdmin(): boolean {
     return getRole() === Role.Admin;
 }
 
+export function getEmail(): string | null {
+    const token = getToken();
+    if (!token) return null;
+
+    const payload = decodeJwtPayload(token);
+    return payload?.email ?? null;
+}
 
 
 

@@ -25,7 +25,7 @@ export class CreateProductDto {
     @IsOptional()
     description?: string;
 
-    @IsNumber()
+    @IsNumber({ maxDecimalPlaces:2 })
     @Min(0)
     price: number;
 
@@ -48,7 +48,7 @@ export class UpdateProductDto {
     @IsOptional()
     description?: string;
 
-    @IsNumber()
+    @IsNumber({ maxDecimalPlaces:2 })
     @Min(0)
     @IsOptional()
     price?: number;
