@@ -2,6 +2,9 @@ interface Field {
     name: string;
     label: string;
     required?: boolean;
+    type?: 'text' | 'select';
+    options?: { value: string; label: string }[];
+    maxLength?: number;
   }
   
   interface Props {
@@ -26,13 +29,27 @@ interface Field {
             {fields.map((field) => (
               <div key={field.name}>
                 <label className="mb-1 block text-sm font-medium">{field.label}</label>
-                <input
+                {field.type === 'select' ? (
+                <select 
+                required={field.required} 
+                value={values[field.name]?? ''} 
+                onChange={(e) => onChange(field.name, e.target.value)}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-gray-900 focus:outline-none">
+                 <option value="">Select...</option>
+                  {field.options?.map((opt) => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                 </select>
+                   ) : (
+                 <input
                   required={field.required}
                   value={values[field.name] ?? ''}
                   onChange={(e) => onChange(field.name, e.target.value)}
+                  maxLength={field.maxLength}
                   className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-gray-900 focus:outline-none"
                 />
-              </div>
+              )}
+            </div>
             ))}
             <div className="flex justify-end gap-2">
               <button type="button" onClick={onCancel} className="rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100">Cancel</button>
