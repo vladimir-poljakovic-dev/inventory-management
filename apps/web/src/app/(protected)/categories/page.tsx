@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Category } from '@repo/types';
+import type { Category } from '@repo/types';
 import { isAdmin } from '@/lib/jwt';
 import { useCategories } from './useCategories';
 import { useCrudForms } from '@/lib/useCrudForms';
@@ -11,7 +11,7 @@ import DeleteModal from '@/components/DeleteModal';
 
 const FIELDS = [
   { name: 'name', label: 'Name', required: true },
-  { name: 'description', label: 'Description' },
+  { name: 'description', label: 'Description(max length is 60 characters.)', maxLength:60},
 ];
 const EMPTY = { name: '', description: '' };
 
