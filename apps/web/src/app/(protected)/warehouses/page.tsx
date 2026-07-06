@@ -12,7 +12,7 @@ import DeleteModal from '@/components/DeleteModal';
 const FIELDS = [
   { name: 'name', label: 'Name', required: true },
   { name: 'location', label: 'Location', required: true },
-  { name: 'description', label: 'Description' },
+  { name: 'description', label: 'Description(max length is 60 characters.)', maxLength:60},
 ];
 const EMPTY = { name: '', location: '', description: '' };
 
