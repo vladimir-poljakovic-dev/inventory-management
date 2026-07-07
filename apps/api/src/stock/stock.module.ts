@@ -4,6 +4,6 @@ import { Stock } from "./stock.entity";
 
 @Module ({
     imports: [TypeOrmModule.forFeature([Stock])],
-
+    exports: [TypeOrmModule],
 })
 export class StockModule {}
