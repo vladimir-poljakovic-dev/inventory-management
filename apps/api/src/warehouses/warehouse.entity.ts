@@ -9,6 +9,6 @@ export class Warehouse extends BaseEntity {
     @Column()
     location: string;
 
-    @Column({nullable: true})
-    description: string;
+    @Column({ type: 'varchar', nullable: true })
+    description: string | null;
 }
