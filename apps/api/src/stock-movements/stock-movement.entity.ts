@@ -4,7 +4,7 @@ import { BaseEntity } from '../database/base.entity';
 import { Stock } from '../stock/stock.entity';
 import { User } from '../users/user.entity';
 
-@Entity('stock\_movements')
+@Entity('stock_movements')
 export class StockMovement extends BaseEntity {
 @ManyToOne( () => Stock, {eager:true})
 @JoinColumn({ name: 'stockId' })
