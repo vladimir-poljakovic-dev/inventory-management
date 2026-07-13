@@ -11,3 +11,5 @@ export { CreateWarehouseDto, UpdateWarehouseDto } from './dto/warehouse.dto';
 export type { WareHouse } from './dto/warehouse.dto';
 export { CreateProductDto, UpdateProductDto } from './dto/product.dto';
 export type { Product } from './dto/product.dto';
+export { AdjustStockDto } from './dto/stock.dto';
+export type { StockItem } from './dto/stock.dto';
