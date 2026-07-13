@@ -13,8 +13,8 @@ export class StockMovement extends BaseEntity {
     @Column()
     stockId: string;
 
-    @ManyToOne(() => User, { eager: true })
-    @JoinColumn({ name: 'userId'})
+    @ManyToOne(() => User)
+    @JoinColumn({ name: 'userId' })
     user: User;
 
     @Column()
