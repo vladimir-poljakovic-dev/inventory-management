@@ -6,29 +6,29 @@ import { User } from '../users/user.entity';
 
 @Entity('stock_movements')
 export class StockMovement extends BaseEntity {
-    @ManyToOne( () => Stock, {eager:true})
-    @JoinColumn({ name: 'stockId' })
-    stock: Stock;
+@ManyToOne( () => Stock, {eager:true})
+@JoinColumn({ name: 'stockId' })
+stock: Stock;
 
-    @Column()
-    stockId: string;
+@Column()
+stockId: string;
 
     @ManyToOne(() => User)
     @JoinColumn({ name: 'userId' })
     user: User;
 
-    @Column()
-    userId: string;
+@Column()
+userId: string;
 
-    @Column( {type: 'integer' })
-    quantityDelta: number;
+@Column( {type: 'integer' })
+quantityDelta: number;
 
-    @Column ({type: 'varchar'})
-    reason: string;
-    
-    @Column({
-        type: 'enum',
-        enum: StockMovementType,
-    })
-    type: StockMovementType;
+@Column ({type: 'varchar'})
+reason: string;
+
+@Column({
+    type: 'enum',
+    enum: StockMovementType,
+})
+type: StockMovementType;
 }
