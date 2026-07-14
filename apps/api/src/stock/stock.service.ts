@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { AdjustStockDto, StockMovementType } from '@repo/types';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { StockMovement } from "../stock-movements/stock-movement.entity";
 import { Stock } from './stock.entity';
 
@@ -10,8 +10,7 @@ export class StockService {
     constructor(
         @InjectRepository(Stock)
         private readonly stockRepository: Repository<Stock>,
-        @InjectRepository(StockMovement)
-        private readonly stockMovementRepository: Repository<StockMovement>,
+        private readonly dataSource: DataSource,
     ) {}
 
     findAll(): Promise<Stock[]> {
@@ -19,17 +18,25 @@ export class StockService {
     }
 
     async adjust(dto: AdjustStockDto, userId: string): Promise<Stock> {
-        const stock = await this.stockRepository.findOne({
-            where: { productId: dto.productId, warehouseId: dto.warehouseId },
-        });
-    
+      return this.dataSource.transaction(async (em) => {
+        const stock = await em
+        .createQueryBuilder(Stock, 'stock')
+        .where('stock.productId = :productId AND stock.warehouseId= :warehouseId', {
+          productId: dto.productId,
+          warehouseId: dto.warehouseId,
+        })
+        .setLock('pessimistic_write')
+        .getOne();
+
     if (!stock) throw new NotFoundException('Stock record not found');
 
     stock.quantity += dto.quantityDelta;
+
     if (stock.quantity < 0) {
       throw new BadRequestException('Stock quantity cannot go below zero.');
     }
-    await this.stockRepository.save(stock);
+
+    await em.save(stock);
 
     const type =
       dto.quantityDelta > 0
@@ -38,15 +45,18 @@ export class StockService {
           ? StockMovementType.OUT
           : StockMovementType.ADJUSTMENT;
 
-    const movement = this.stockMovementRepository.create({
+    const movement = em.create(StockMovement, {
       stockId: stock.id,
       userId,
       quantityDelta: dto.quantityDelta,
       reason: dto.reason,
       type,
     });
-    await this.stockMovementRepository.save(movement);
+    await em.save(movement);
 
-    return stock;
-    }
+    return this.stockRepository.findOne({
+      where: { id: stock.id },
+    }) as Promise<Stock>;
+  });
+ }
 }
