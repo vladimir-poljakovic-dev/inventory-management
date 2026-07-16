@@ -1,62 +1,63 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { AdjustStockDto, StockMovementType } from '@repo/types';
 import { DataSource, Repository } from 'typeorm';
-import { StockMovement } from "../stock-movements/stock-movement.entity";
+import { StockMovement } from '../stock-movements/stock-movement.entity';
 import { Stock } from './stock.entity';
 
 @Injectable()
 export class StockService {
-    constructor(
-        @InjectRepository(Stock)
-        private readonly stockRepository: Repository<Stock>,
-        private readonly dataSource: DataSource,
-    ) {}
+  constructor(
+    @InjectRepository(Stock)
+    private readonly stockRepository: Repository<Stock>,
+    private readonly dataSource: DataSource,
+  ) {}
 
-    findAll(): Promise<Stock[]> {
-        return this.stockRepository.find();
-    }
+  findAll(): Promise<Stock[]> {
+    return this.stockRepository.find();
+  }
 
-    async adjust(dto: AdjustStockDto, userId: string): Promise<Stock> {
-      return this.dataSource.transaction(async (em) => {
-        const stock = await em
+  async adjust(dto: AdjustStockDto, userId: string): Promise<Stock> {
+    return this.dataSource.transaction(async (em) => {
+      const stock = await em
         .createQueryBuilder(Stock, 'stock')
-        .where('stock.productId = :productId AND stock.warehouseId= :warehouseId', {
+        .where('stock.productId = :productId AND stock.warehouseId = :warehouseId', {
           productId: dto.productId,
           warehouseId: dto.warehouseId,
         })
         .setLock('pessimistic_write')
         .getOne();
 
-    if (!stock) throw new NotFoundException('Stock record not found');
+      if (!stock) throw new NotFoundException('Stock record not found');
 
-    stock.quantity += dto.quantityDelta;
+      stock.quantity += dto.quantityDelta;
 
-    if (stock.quantity < 0) {
-      throw new BadRequestException('Stock quantity cannot go below zero.');
-    }
+      if (stock.quantity < 0) {
+        throw new BadRequestException('Stock quantity cannot go below zero.');
+      }
 
-    await em.save(stock);
+      await em.save(stock);
 
-    const type =
-      dto.quantityDelta > 0
-        ? StockMovementType.IN
-        : dto.quantityDelta < 0
-          ? StockMovementType.OUT
-          : StockMovementType.ADJUSTMENT;
+      const type =
+        dto.quantityDelta > 0
+          ? StockMovementType.IN
+          : dto.quantityDelta < 0
+            ? StockMovementType.OUT
+            : StockMovementType.ADJUSTMENT;
 
-    const movement = em.create(StockMovement, {
-      stockId: stock.id,
-      userId,
-      quantityDelta: dto.quantityDelta,
-      reason: dto.reason,
-      type,
+      const movement = em.create(StockMovement, {
+        stockId: stock.id,
+        userId,
+        quantityDelta: dto.quantityDelta,
+        reason: dto.reason,
+        type,
+      });
+
+      await em.save(movement);
+
+      return this.stockRepository.findOne({
+        where: { id: stock.id },
+      }) as Promise<Stock>;
     });
-    await em.save(movement);
-
-    return this.stockRepository.findOne({
-      where: { id: stock.id },
-    }) as Promise<Stock>;
-  });
- }
+  }
 }
