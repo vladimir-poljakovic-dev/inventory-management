@@ -13,9 +13,9 @@ stock: Stock;
 @Column()
 stockId: string;
 
-@ManyToOne(() => User)
-@JoinColumn({ name: 'userId' })
-user: User;
+    @ManyToOne(() => User)
+    @JoinColumn({ name: 'userId' })
+    user: User;
 
 @Column()
 userId: string;
