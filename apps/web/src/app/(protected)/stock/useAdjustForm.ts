@@ -19,7 +19,7 @@ export function useAdjustForm(onSuccess: () => void) {
       await stockApi.adjust({
         productId,
         warehouseId,
-        quantityDelta: parseInt(quantityDelta),
+        quantityDelta: parseInt(quantityDelta, 10), // Added 10 for explicit parse of base 10 
         reason,
       });
       setProductId('');

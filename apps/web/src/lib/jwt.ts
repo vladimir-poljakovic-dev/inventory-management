@@ -1,7 +1,6 @@
 import { JwtPayload, Role } from "@repo/types";
 import { getToken } from "./auth";
 
-
 function decodeJwtPayload(token: string): JwtPayload | null {
     try{
         const base64Url = token.split('.')[1];
@@ -12,9 +11,6 @@ function decodeJwtPayload(token: string): JwtPayload | null {
         return null;
     }
 }
-
-
-
 
 export function getRole(): Role | null {
     const token = getToken();
@@ -28,21 +24,14 @@ export function isAdmin(): boolean {
     return getRole() === Role.Admin;
 }
 
+export function canAdjustStock(): boolean {
+    const role = getRole();
+    return role === Role.Admin || role === Role.WarehouseManager;
+  }
+
 export function getEmail(): string | null {
     const token = getToken();
     if (!token) return null;
-
     const payload = decodeJwtPayload(token);
     return payload?.email ?? null;
 }
-
-
-
-
-
-
-
-
-
-
-
