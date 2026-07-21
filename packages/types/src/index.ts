@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 export { Role } from './enums/role.enum';
 export { PurchaseOrderStatus } from './enums/purchase-order-status.enum';
 export { StockMovementType } from './enums/stock-movement-type.enum';

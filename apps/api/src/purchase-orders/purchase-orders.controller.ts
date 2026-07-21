@@ -1,9 +1,8 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
-import { Role } from '@repo/types';
+import { CreatePurchaseOrderDto, Role } from '@repo/types';
 import { Roles } from '../common/decorators/roles.decorator';
 import { PurchaseOrdersService } from './purchase-orders.service';
 import { PurchaseOrder } from './purchase-order.entity';
-import { CreatePurchaseOrderRequest } from './create-purchase-order.dto';
 
 @Controller('purchase-orders')
 export class PurchaseOrdersController {
@@ -22,7 +21,7 @@ export class PurchaseOrdersController {
   @Post()
   @Roles(Role.Admin)
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() dto: CreatePurchaseOrderRequest): Promise<PurchaseOrder> {
+  create(@Body() dto: CreatePurchaseOrderDto): Promise<PurchaseOrder> {
     return this.purchaseOrdersService.create(dto);
   }
 }

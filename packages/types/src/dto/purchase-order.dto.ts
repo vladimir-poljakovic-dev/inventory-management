@@ -1,4 +1,5 @@
 import { ArrayMinSize, IsArray, IsNumber, IsOptional, IsString, IsUUID, Min, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 import { PurchaseOrderStatus } from '../enums/purchase-order-status.enum';
 import type { Product } from './product.dto';
 import type { Supplier } from './supplier.dto';
@@ -47,5 +48,7 @@ export class CreatePurchaseOrderDto {
 
   @IsArray()
   @ArrayMinSize(1)
+  @ValidateNested({ each: true })
+  @Type(() => CreatePurchaseOrderItemDto)
   items: CreatePurchaseOrderItemDto[];
 }
