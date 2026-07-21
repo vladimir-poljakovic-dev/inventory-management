@@ -1,4 +1,4 @@
-import { type Supplier, CreateSupplierDto, UpdateSupplierDto } from "@repo/types";
+import type { Supplier, CreateSupplierDto, UpdateSupplierDto } from "@repo/types";
 import api from "./api";
 
 export const suppliersApi = {

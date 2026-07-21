@@ -1,4 +1,4 @@
-import { AdjustStockDto, StockItem } from '@repo/types';
+import type { AdjustStockDto, StockItem } from '@repo/types';
 import api from './api';
 
 export const stockApi = {
