@@ -1,4 +1,4 @@
-import { CreateWarehouseDto, UpdateWarehouseDto, type WareHouse } from '@repo/types';
+import type { CreateWarehouseDto, UpdateWarehouseDto, WareHouse } from '@repo/types';
 import api from './api';
 
 export const warehousesApi = {

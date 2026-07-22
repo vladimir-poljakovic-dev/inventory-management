@@ -1,4 +1,6 @@
+import 'reflect-metadata';
 export { Role } from './enums/role.enum';
+export { PurchaseOrderStatus } from './enums/purchase-order-status.enum';
 export { StockMovementType } from './enums/stock-movement-type.enum';
 export { RegisterDto, LoginDto } from './dto/auth.dto';
 export type { AuthResponseDto } from './dto/auth.dto';
@@ -13,3 +15,5 @@ export { CreateProductDto, UpdateProductDto } from './dto/product.dto';
 export type { Product } from './dto/product.dto';
 export { AdjustStockDto } from './dto/stock.dto';
 export type { StockItem } from './dto/stock.dto';
+export { CreatePurchaseOrderItemDto, CreatePurchaseOrderDto } from './dto/purchase-order.dto';
+export type { PurchaseOrderItem, PurchaseOrder } from './dto/purchase-order.dto';

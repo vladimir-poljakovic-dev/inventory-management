@@ -1,6 +1,5 @@
-import { type Category, CreateCategoryDto, UpdateCategoryDto } from '@repo/types';
+import type { Category, CreateCategoryDto, UpdateCategoryDto } from '@repo/types';
 import api from './api';
-
 
 export const categoriesApi = {
   getAll: () => api.get<Category[]>('/categories'),
