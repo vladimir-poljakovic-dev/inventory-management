@@ -41,8 +41,7 @@ export class PurchaseOrdersService {
 
   async receive(id: string, dto: ReceivePurchaseOrderDto, userId: string): Promise<PurchaseOrder> {
     return this.dataSource.transaction(async (em) => {
-      // Lock only the PO row itself, no joins
-      const order = await em
+            const order = await em
         .createQueryBuilder(PurchaseOrder, 'order')
         .where('order.id = :id', { id })
         .setLock('pessimistic_write')
@@ -53,26 +52,35 @@ export class PurchaseOrdersService {
         throw new BadRequestException('Purchase order has already been received.');
       }
   
-      // Load items separately since we can't join with lock
       const items = await em.find(PurchaseOrderItem, {
         where: { purchaseOrderId: id },
       });
   
-      for (const item of items) {
-        let stock = await em.findOne(Stock, {
+      for (const item of items) { // Check if the record exists
+        const existingStock = await em.findOne(Stock, {
           where: { productId: item.productId, warehouseId: dto.warehouseId },
+      });
+  
+      // If no stock record we create with 0 quantity
+      if (!existingStock) {
+          const newStock = em.create(Stock, {
+          productId: item.productId,
+          warehouseId: dto.warehouseId,
+          quantity: 0,
+          lowStockThreshold: 0,
         });
-  
-        if (!stock) {
-          stock = em.create(Stock, {
-            productId: item.productId,
-            warehouseId: dto.warehouseId,
-            quantity: 0,
-            lowStockThreshold: 0,
-          });
-          await em.save(stock);
-        }
-  
+        await em.save(newStock);
+      }
+      //Locking the stock before update
+      const stock = await em
+      .createQueryBuilder(Stock, 'stock')
+      .where('stock.productId = :productId AND stock.warehouseId = :warehouseId', {
+        productId: item.productId,
+        warehouseId: dto.warehouseId,
+      })
+      .setLock('pessimistic_write')
+      .getOne() as Stock;
+
         stock.quantity += item.quantity;
         await em.save(stock);
   
