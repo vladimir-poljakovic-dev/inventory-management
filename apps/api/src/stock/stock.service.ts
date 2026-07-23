@@ -17,6 +17,20 @@ export class StockService {
     return this.stockRepository.find();
   }
 
+  findLowStock(): Promise<Stock[]> {
+    return this.stockRepository
+      .createQueryBuilder('stock')
+      .leftJoinAndSelect('stock.product', 'product')
+      .leftJoinAndSelect('stock.warehouse', 'warehouse')
+      .where('stock.lowStockThreshold > 0')
+      .andWhere('stock.quantity <= stock.lowStockThreshold')
+      .orderBy(
+        'CAST(stock.quantity AS FLOAT) / CAST(stock."lowStockThreshold" AS FLOAT)',
+        'ASC',
+      )
+      .getMany();
+  }
+
   async adjust(dto: AdjustStockDto, userId: string): Promise<Stock> {
     return this.dataSource.transaction(async (em) => {
       const stock = await em
