@@ -13,6 +13,11 @@ export class StockController {
   findAll(): Promise<Stock[]> {
     return this.stockService.findAll();
   }
+  
+  @Get('low')
+  findLowStock(): Promise<Stock[]> {
+    return this.stockService.findLowStock();
+  }
 
   @Post('adjust')
   @Roles(Role.Admin, Role.WarehouseManager)
