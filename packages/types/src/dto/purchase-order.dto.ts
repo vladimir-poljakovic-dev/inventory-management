@@ -52,3 +52,8 @@ export class CreatePurchaseOrderDto {
   @Type(() => CreatePurchaseOrderItemDto)
   items: CreatePurchaseOrderItemDto[];
 }
+
+export class ReceivePurchaseOrderDto {
+    @IsUUID()
+    warehouseId: string;
+}
