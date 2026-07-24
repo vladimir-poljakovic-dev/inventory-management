@@ -69,6 +69,13 @@ export default function DashboardPage() {
       >Stocks
       </Link>
 
+      <Link
+        href="/purchase-orders"
+        onClick={() => setMenuOpen(false)}
+        className="block px-4 py-2 text-sm hover:bg-gray-100"
+      >Purchase orders
+      </Link>
+
       <button
         onClick={handleLogout}
         className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50"
