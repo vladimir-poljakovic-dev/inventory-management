@@ -27,7 +27,7 @@ export default function StockPage() {
     <main className="mx-auto max-w-5xl px-6 py-10">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-semibold">Stock</h1>
-        {canAdjust && <button onClick={() => form.setShow(true)} className="rounded-md bg-gray-900 px-4 py-2 text-sm text-white hover:bg-gray-800">Adjust Stock</button>}
+        {canAdjust && <button onClick={() => form.setShow(true)} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm text-white hover:bg-indigo-700">Adjust Stock</button>}
       </div>
 
       {error && <p className="mb-4 text-sm text-red-700">{error}</p>}

@@ -35,6 +35,8 @@ export function useProducts() {
     }
 
     async function updateProduct(id: string, values: Record<string, string>) {
+        console.log('all edit values:', values);
+        console.log('categoryId specifically:', values.categoryId);
         await productsApi.update(id, {
             name: values.name,
             sku: values.sku,

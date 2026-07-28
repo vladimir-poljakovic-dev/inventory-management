@@ -23,7 +23,7 @@ export class StockService {
       .leftJoinAndSelect('stock.product', 'product')
       .leftJoinAndSelect('stock.warehouse', 'warehouse')
       .where('stock.lowStockThreshold > 0')
-      .andWhere('stock.quantity <= stock.lowStockThreshold')
+      .andWhere('stock.quantity < stock.lowStockThreshold')
       .orderBy(
         'CAST(stock.quantity AS FLOAT) / CAST(stock."lowStockThreshold" AS FLOAT)',
         'ASC',

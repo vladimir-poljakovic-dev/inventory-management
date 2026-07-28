@@ -1,91 +1,110 @@
 'use client';
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { clearToken, clearTokenCookie } from '@/lib/auth';
-import { useState} from "react";
-import { getEmail } from "@/lib/jwt";
+import { useDashboard } from './useDashboard';
+
+const statCards = (data: NonNullable<ReturnType<typeof useDashboard>['data']>) => [
+  { label: 'Total Products', value: data.totalProducts, color: 'bg-indigo-600' },
+  { label: 'Warehouses', value: data.totalWarehouses, color: 'bg-emerald-600' },
+  { label: 'Suppliers', value: data.totalSuppliers, color: 'bg-sky-600' },
+  { label: 'Low Stock Items', value: data.lowStockCount, color: data.lowStockCount > 0 ? 'bg-red-600' : 'bg-gray-600' },
+  { label: 'Total Stock Value', value: `$${data.totalStockValue.toLocaleString()}`, color: 'bg-violet-600' },
+];
+
+function movementColor(type: string) {
+  if (type === 'in') return 'text-emerald-600';
+  if (type === 'out') return 'text-red-600';
+  return 'text-yellow-600';
+}
+
+function movementSign(type: string, delta: number) {
+  if (type === 'in') return `+${delta}`;
+  if (type === 'out') return `${delta}`;
+  return `${delta > 0 ? '+' : ''}${delta}`;
+}
 
 export default function DashboardPage() {
-  const router = useRouter();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const email = getEmail();
-  const username = email?.split("@")[0] ?? "";
-
-  function handleLogout() {
-    clearToken();
-    clearTokenCookie();
-    router.push('/login');
-    router.refresh();
-  }
-
+  const { data, lowStock, loading, error } = useDashboard();
   return (
-    <main className="mx-auto max-w-4xl px-6 py-10">
-      <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-3xl font-semibold ">Dashboard</h1>
-        <div className="relative">
-  <button
-    onClick={() => setMenuOpen(!menuOpen)}
-    className="rounded-md bg-gray-900 px-4 py-2 text-sm text-white hover:bg-gray-800"
-  >Menu
-  </button>
-  {menuOpen && (
-    <div className="absolute right-0 mt-2 w-48 rounded-md border border-gray-300 bg-white shadow-lg"> 
-      <span className="block px-4 py-2 text-sm font-semibold">
-      Hello: {username}
-      </span>
-      <Link
-        href="/categories"
-        onClick={() => setMenuOpen(false)}
-        className="block px-4 py-2 text-sm hover:bg-gray-100"
-      >Categories
-      </Link>
+    <main className="px-6 py-10">
+      <h1 className="mb-8 text-3xl font-semibold">Dashboard</h1>
 
-      <Link
-        href="/products"
-        onClick={() => setMenuOpen(false)}
-        className="block px-4 py-2 text-sm hover:bg-gray-100"
-      >Products
-      </Link>
+      {error && <p className="mb-4 text-sm text-red-700">{error}</p>}
+      {loading && <p className="text-gray-500">Loading dashboard...</p>}
 
-      <Link
-        href="/suppliers"
-        onClick={() => setMenuOpen(false)}
-        className="block px-4 py-2 text-sm hover:bg-gray-100"
-      >Suppliers
-      </Link>
+      {data && (
+        <>
+          <div className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-5">
+          {statCards(data).map((card) => (
+           <div key={card.label} className={`rounded-xl p-4 text-white shadow-md ${card.color}`}>
+           <p className="text-xs font-medium opacity-80 break-words">{card.label}</p>
+           <p className="mt-1 text-2xl font-bold break-all">{card.value}</p>
+         </div>
+         ))}
+          </div>
 
-      <Link
-        href="/warehouses"
-        onClick={() => setMenuOpen(false)}
-        className="block px-4 py-2 text-sm hover:bg-gray-100"
-      >Warehouses
-      </Link>
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+              <h2 className="mb-4 text-lg font-semibold text-gray-900">
+                Low Stock Warnings
+                {lowStock.length > 0 && (
+                  <span className="ml-2 rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
+                    {lowStock.length}
+                  </span>
+                )}
+              </h2>
+              {lowStock.length === 0 ? (
+                <p className="text-sm text-gray-500">All stock levels are healthy.</p>
+              ) : (
+                <ul className="divide-y divide-gray-100">
+                  {lowStock.map((s) => (
+                    <li key={s.id} className="py-2">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium text-gray-900 truncate">{s.product.name}</p>
+                          <p className="text-xs text-gray-400">{s.warehouse.name}</p>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <p className="text-sm font-bold text-red-600">{s.quantity}</p>
+                          <p className="text-xs text-gray-400">threshold: {s.lowStockThreshold}</p>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
 
-      <Link
-        href="/stock"
-        onClick={() => setMenuOpen(false)}
-        className="block px-4 py-2 text-sm hover:bg-gray-100"
-      >Stocks
-      </Link>
-
-      <Link
-        href="/purchase-orders"
-        onClick={() => setMenuOpen(false)}
-        className="block px-4 py-2 text-sm hover:bg-gray-100"
-      >Purchase orders
-      </Link>
-
-      <button
-        onClick={handleLogout}
-        className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50"
-      >Log out
-      </button>
-    </div>
-  )}
-</div>
-      </div>
-      <p className="text-gray-600">Welcome to Inventory Management.</p>
+            <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+              <h2 className="mb-4 text-lg font-semibold text-gray-900">Recent Activity</h2>
+              {data.recentMovements.length === 0 ? (
+                <p className="text-sm text-gray-500">No recent movements.</p>
+              ) : (
+                <ul className="divide-y divide-gray-100">
+                {data.recentMovements.map((m) => (
+                  <li key={m.id} className="py-2">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-gray-900 truncate">{m.stock.product.name}</p>
+                        <p className="text-xs text-gray-500 break-words">{m.reason}</p>
+                        <p className="text-xs text-gray-400 truncate">{m.user.email}</p>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <p className={`text-sm font-bold ${movementColor(m.type)}`}>
+                          {movementSign(m.type, m.quantityDelta)}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          {new Date(m.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </main>
   );
 }
