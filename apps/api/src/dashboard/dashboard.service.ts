@@ -37,7 +37,7 @@ export class DashboardService {
       this.stockRepository
         .createQueryBuilder('stock')
         .where('stock.lowStockThreshold > 0')
-        .andWhere('stock.quantity <= stock.lowStockThreshold')
+        .andWhere('stock.quantity < stock.lowStockThreshold')
         .getCount(),
       this.stockRepository
         .createQueryBuilder('stock')
