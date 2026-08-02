@@ -1,4 +1,4 @@
-import { IsOptional, IsString, MinLength } from "class-validator";
+import { IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
 export interface WareHouse {
   id: string;
@@ -20,6 +20,7 @@ export class CreateWarehouseDto {
 
   @IsString()
   @IsOptional()
+  @MaxLength(60)
   description?: string;
 }
 
@@ -36,5 +37,6 @@ export class UpdateWarehouseDto {
 
   @IsString()
   @IsOptional()
+  @MaxLength(60)
   description?: string;
 }

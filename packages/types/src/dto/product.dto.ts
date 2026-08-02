@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, Min, MinLength } from "class-validator";
+import { IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, MaxLength, Min, MinLength } from "class-validator";
 import { type Category } from "./category.dto";
 
 export interface Product {
@@ -23,6 +23,7 @@ export class CreateProductDto {
 
     @IsString()
     @IsOptional()
+    @MaxLength(60)
     description?: string;
 
     @IsNumber({ maxDecimalPlaces:2 })
@@ -46,6 +47,7 @@ export class UpdateProductDto {
 
     @IsString()
     @IsOptional()
+    @MaxLength(60)
     description?: string;
 
     @IsNumber({ maxDecimalPlaces:2 })

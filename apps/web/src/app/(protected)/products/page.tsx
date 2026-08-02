@@ -17,8 +17,6 @@ export default function ProductsPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const { products, loading, error, categoryFilter, setCategoryFilter, createProduct, updateProduct, deleteProduct } = useProducts();
   const forms = useCrudForms<Product>(EMPTY, createProduct, updateProduct, deleteProduct, (p) => {
-    console.log('product being edited:', p);
-    console.log('category:', p.category);
     return {
       name: p.name,
       sku: p.sku,

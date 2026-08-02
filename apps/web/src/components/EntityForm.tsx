@@ -2,6 +2,7 @@ interface Field {
   name: string;
   label: string;
   required?: boolean;
+  maxLength?: number;
   type?: 'text' | 'select';
   options?: { value: string; label: string }[];
 }
@@ -43,6 +44,7 @@ export default function EntityForm({ title, fields, values, loading, error, onCh
               ) : (
                 <input
                   required={field.required}
+                  maxLength={field.maxLength}
                   value={values[field.name] ?? ''}
                   onChange={(e) => onChange(field.name, e.target.value)}
                   className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"

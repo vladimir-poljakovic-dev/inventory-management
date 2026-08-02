@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import type { StockItem } from '@repo/types';
 import { getApiErrorMessage } from '@/lib/api';
-import { dashboardApi, DashboardData } from '@/lib/dashboard';
+import type { DashboardData } from '@repo/types';
+import { dashboardApi } from '@/lib/dashboard';
 
 export function useDashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
-  const [lowStock, setLowStock] = useState<StockItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -15,12 +14,7 @@ export function useDashboard() {
     setLoading(true);
     setError('');
     try {
-      const [dashData, lowStockData] = await Promise.all([
-        dashboardApi.get(),
-        dashboardApi.getLowStock(),
-      ]);
-      setData(dashData);
-      setLowStock(lowStockData);
+      setData(await dashboardApi.get());
     } catch (err) {
       setError(getApiErrorMessage(err));
     } finally {
@@ -28,5 +22,5 @@ export function useDashboard() {
     }
   }
 
-  return { data, lowStock, loading, error, fetchDashboard };
+  return { data, loading, error, fetchDashboard };
 }

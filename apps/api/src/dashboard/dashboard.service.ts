@@ -6,6 +6,8 @@ import { Warehouse } from '../warehouses/warehouse.entity';
 import { Supplier } from '../suppliers/supplier.entity';
 import { Stock } from '../stock/stock.entity';
 import { StockMovement } from '../stock-movements/stock-movement.entity';
+import { DashboardData } from '@repo/types';
+
 
 @Injectable()
 export class DashboardService {
@@ -22,13 +24,13 @@ export class DashboardService {
     private readonly stockMovementRepository: Repository<StockMovement>,
   ) {}
 
-  async getDashboard() {
+  async getDashboard(): Promise<DashboardData> {
     const [
       totalProducts,
       totalWarehouses,
       totalSuppliers,
-      lowStockCount,
-      stockValues,
+      stockValueResult,
+      lowStockItems,
       recentMovements,
     ] = await Promise.all([
       this.productRepository.count(),
@@ -36,14 +38,22 @@ export class DashboardService {
       this.supplierRepository.count(),
       this.stockRepository
         .createQueryBuilder('stock')
-        .where('stock.lowStockThreshold > 0')
-        .andWhere('stock.quantity < stock.lowStockThreshold')
-        .getCount(),
+        .leftJoin('stock.product', 'product')
+        .select('COALESCE(SUM(CAST(stock.quantity AS FLOAT) * CAST(product.price AS FLOAT)), 0)', 'total')
+        .getRawOne<{ total: string }>(),
       this.stockRepository
         .createQueryBuilder('stock')
         .leftJoinAndSelect('stock.product', 'product')
+        .leftJoinAndSelect('product.category', 'category')
+        .leftJoinAndSelect('stock.warehouse', 'warehouse')
+        .where('stock.lowStockThreshold > 0')
+        .andWhere('stock.quantity < stock.lowStockThreshold')
+        .orderBy(
+          'CAST(stock.quantity AS FLOAT) / CAST(stock."lowStockThreshold" AS FLOAT)',
+          'ASC',
+        )
         .getMany(),
-        this.stockMovementRepository
+      this.stockMovementRepository
         .createQueryBuilder('movement')
         .leftJoinAndSelect('movement.stock', 'stock')
         .leftJoinAndSelect('stock.product', 'product')
@@ -54,17 +64,14 @@ export class DashboardService {
         .getMany(),
     ]);
 
-    const totalStockValue = stockValues.reduce((sum, stock) => {
-      return sum + stock.quantity * stock.product.price;
-    }, 0);
-
     return {
       totalProducts,
       totalWarehouses,
       totalSuppliers,
-      lowStockCount,
-      totalStockValue: Math.round(totalStockValue * 100) / 100,
-      recentMovements,
-    };
+      lowStockCount: lowStockItems.length,
+      totalStockValue: parseFloat(stockValueResult?.total ?? '0'),
+      recentMovements: recentMovements as any,
+      lowStockItems: lowStockItems as any,
+    } as DashboardData;
   }
 }

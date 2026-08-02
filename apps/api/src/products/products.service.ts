@@ -31,14 +31,10 @@ export class ProductService {
         return this.productRepository.save(product);
     }
 
-    async update(id: string, dto: UpdateProductDto): Promise<Product> { //bro
+    async update(id: string, dto: UpdateProductDto): Promise<Product> {
         await this.findOne(id);
         await this.productRepository.update(id, dto);
-        return this.productRepository
-          .createQueryBuilder('product')
-          .leftJoinAndSelect('product.category', 'category')
-          .where('product.id = :id', { id })
-          .getOne() as Promise<Product>;
+        return this.findOne(id);
       }
 
     async remove(id: string): Promise<void> {
