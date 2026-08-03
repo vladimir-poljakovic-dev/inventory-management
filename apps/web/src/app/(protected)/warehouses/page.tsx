@@ -27,7 +27,7 @@ export default function WarehousesPage() {
     <main className="mx-auto max-w-4xl px-6 py-10">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-semibold">Warehouses</h1>
-        {admin && <button onClick={() => forms.setShowCreate(true)} className="rounded-md bg-gray-900 px-4 py-2 text-sm text-white hover:bg-gray-800">New Warehouse</button>}
+        {admin && <button onClick={() => forms.setShowCreate(true)} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm text-white hover:bg-indigo-700">New Warehouse</button>}
       </div>
 
       {error && <p className="mb-4 text-sm text-red-700">{error}</p>}

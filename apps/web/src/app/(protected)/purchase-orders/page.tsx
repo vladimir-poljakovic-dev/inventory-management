@@ -32,7 +32,7 @@ export default function PurchaseOrdersPage() {
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-semibold">Purchase Orders</h1>
         {admin && (
-          <button onClick={() => createOrder.setShow(true)} className="rounded-md bg-gray-900 px-4 py-2 text-sm text-white hover:bg-gray-800">
+          <button onClick={() => createOrder.setShow(true)} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm text-white hover:bg-indigo-700">
             New Order
           </button>
         )}
@@ -43,37 +43,39 @@ export default function PurchaseOrdersPage() {
       {!loading && orders.length === 0 && <p className="text-gray-500">No purchase orders yet.</p>}
 
       {!loading && orders.length > 0 && (
-        <table className="w-full border-collapse text-sm">
-          <thead>
-            <tr className="border-b text-left">
-              <th className="py-2 pr-4 font-medium">Supplier</th>
-              <th className="py-2 pr-4 font-medium">Status</th>
-              <th className="py-2 pr-4 font-medium">Items</th>
-              <th className="py-2 pr-4 font-medium">Created</th>
-              <th className="py-2 font-medium">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order.id} className="border-b hover:bg-gray-50">
-                <td className="py-2 pr-4">{order.supplier.name}</td>
-                <td className="py-2 pr-4">
-                  <span className={`font-medium ${order.status === 'received' ? 'text-green-600' : 'text-yellow-600'}`}>
-                    {order.status}
-                  </span>
-                </td>
-                <td className="py-2 pr-4">{order.items.length}</td>
-                <td className="py-2 pr-4 text-gray-500">{new Date(order.createdAt).toLocaleDateString()}</td>
-                <td className="py-2">
-                  <button onClick={() => setSelectedOrder(order)} className="rounded border border-gray-300 px-3 py-1 text-xs hover:bg-gray-100">
-                    View
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+   <div className="rounded-lg border border-gray-200 overflow-hidden shadow-sm overflow-x-auto">
+   <table className="w-full min-w-[500px] border-collapse text-sm">
+      <thead>
+        <tr className="bg-gray-900 text-left text-white">
+          <th className="px-4 py-3 font-medium">Supplier</th>
+          <th className="px-4 py-3 font-medium">Status</th>
+          <th className="px-4 py-3 font-medium">Items</th>
+          <th className="px-4 py-3 font-medium">Created</th>
+          <th className="px-4 py-3 font-medium">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {orders.map((order, i) => (
+          <tr key={order.id} className={`border-t border-gray-100 hover:bg-indigo-50 transition-colors ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+            <td className="px-4 py-3 text-gray-700">{order.supplier.name}</td>
+            <td className="px-4 py-3">
+              <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${order.status === 'received' ? 'bg-emerald-100 text-emerald-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                {order.status}
+              </span>
+            </td>
+            <td className="px-4 py-3 text-gray-700">{order.items.length}</td>
+            <td className="px-4 py-3 text-gray-500">{new Date(order.createdAt).toLocaleDateString()}</td>
+            <td className="px-4 py-3">
+              <button onClick={() => setSelectedOrder(order)} className="rounded border border-indigo-300 px-3 py-1 text-xs text-indigo-600 hover:bg-indigo-50">
+                View
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
 
       {createOrder.show && (
         <CreateOrderModal

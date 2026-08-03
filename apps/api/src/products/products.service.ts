@@ -32,10 +32,10 @@ export class ProductService {
     }
 
     async update(id: string, dto: UpdateProductDto): Promise<Product> {
-        const product = await this.findOne(id);
-        Object.assign(product, dto);
-        return this.productRepository.save(product);
-    }
+        await this.findOne(id);
+        await this.productRepository.update(id, dto);
+        return this.findOne(id);
+      }
 
     async remove(id: string): Promise<void> {
         const product = await this.findOne(id);

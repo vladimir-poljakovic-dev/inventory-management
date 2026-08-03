@@ -1,37 +1,38 @@
 interface Column<T> {
-    header: string;
-    render: (item: T) => React.ReactNode;
-  }
-  
-  interface Props<T extends { id: string }> {
-    items: T[];
-    columns: Column<T>[];
-    admin: boolean;
-    onEdit: (item: T) => void;
-    onDelete: (id: string) => void;
-  }
-  
-  export default function EntityTable<T extends { id: string }>({ items, columns, admin, onEdit, onDelete }: Props<T>) {
-    return (
-      <table className="w-full border-collapse text-sm">
+  header: string;
+  render: (item: T) => React.ReactNode;
+}
+
+interface Props<T extends { id: string }> {
+  items: T[];
+  columns: Column<T>[];
+  admin: boolean;
+  onEdit: (item: T) => void;
+  onDelete: (id: string) => void;
+}
+
+export default function EntityTable<T extends { id: string }>({ items, columns, admin, onEdit, onDelete }: Props<T>) {
+  return (
+    <div className="rounded-lg border border-gray-200 overflow-hidden shadow-sm overflow-x-auto">
+      <table className="w-full min-w-[500px] border-collapse text-sm">
         <thead>
-          <tr className="border-b text-left">
+          <tr className="bg-gray-900 text-left text-white">
             {columns.map((col) => (
-              <th key={col.header} className="py-2 pr-4 font-medium">{col.header}</th>
+              <th key={col.header} className="px-4 py-3 font-medium">{col.header}</th>
             ))}
-            {admin && <th className="py-2 font-medium">Actions</th>}
+            {admin && <th className="px-4 py-3 font-medium">Actions</th>}
           </tr>
         </thead>
         <tbody>
-          {items.map((item) => (
-            <tr key={item.id} className="border-b hover:bg-gray-50">
+          {items.map((item, i) => (
+            <tr key={item.id} className={`border-t border-gray-100 hover:bg-indigo-50 transition-colors ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
               {columns.map((col) => (
-                <td key={col.header} className="py-2 pr-4">{col.render(item)}</td>
+                <td key={col.header} className="px-4 py-3 text-gray-700">{col.render(item)}</td>
               ))}
               {admin && (
-                <td className="py-2">
+                <td className="px-4 py-3">
                   <div className="flex gap-2">
-                    <button onClick={() => onEdit(item)} className="rounded border border-gray-300 px-3 py-1 text-xs hover:bg-gray-100">Edit</button>
+                    <button onClick={() => onEdit(item)} className="rounded border border-indigo-300 px-3 py-1 text-xs text-indigo-600 hover:bg-indigo-50">Edit</button>
                     <button onClick={() => onDelete(item.id)} className="rounded border border-red-300 px-3 py-1 text-xs text-red-600 hover:bg-red-50">Delete</button>
                   </div>
                 </td>
@@ -40,5 +41,6 @@ interface Column<T> {
           ))}
         </tbody>
       </table>
-    );
-  }
+    </div>
+  );
+}

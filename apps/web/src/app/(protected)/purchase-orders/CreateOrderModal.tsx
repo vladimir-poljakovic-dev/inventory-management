@@ -20,7 +20,7 @@ interface Props {
 
 export default function CreateOrderModal({ suppliers, products, supplierId, notes, items, loading, error, onChangeSupplier, onChangeNotes, onUpdateItem, onAddItem, onRemoveItem, onSubmit, onCancel }: Props) {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/40">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
       <div className="w-full max-w-2xl rounded-lg bg-white p-6 shadow-lg max-h-[90vh] overflow-y-auto">
         <h2 className="mb-4 text-xl font-semibold">New Purchase Order</h2>
         {error && <p className="mb-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
@@ -59,7 +59,7 @@ export default function CreateOrderModal({ suppliers, products, supplierId, note
 
           <div className="flex justify-end gap-2">
             <button type="button" onClick={onCancel} className="rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100">Cancel</button>
-            <button type="submit" disabled={loading} className="rounded-md bg-gray-900 px-4 py-2 text-sm text-white hover:bg-gray-800 disabled:opacity-50">
+            <button type="submit" disabled={loading} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm text-white hover:bg-indigo-700">
               {loading ? 'Creating...' : 'Create'}
             </button>
           </div>

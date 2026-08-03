@@ -17,3 +17,4 @@ export { AdjustStockDto } from './dto/stock.dto';
 export type { StockItem } from './dto/stock.dto';
 export { CreatePurchaseOrderItemDto, CreatePurchaseOrderDto, ReceivePurchaseOrderDto } from './dto/purchase-order.dto';
 export type { PurchaseOrderItem, PurchaseOrder } from './dto/purchase-order.dto';
+export type { DashboardData, RecentMovement, LowStockItem } from './dto/dashboard.dto';

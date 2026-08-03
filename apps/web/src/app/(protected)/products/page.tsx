@@ -16,13 +16,15 @@ export default function ProductsPage() {
   const [admin, setAdmin] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const { products, loading, error, categoryFilter, setCategoryFilter, createProduct, updateProduct, deleteProduct } = useProducts();
-  const forms = useCrudForms<Product>(EMPTY, createProduct, updateProduct, deleteProduct, (p) => ({
-    name: p.name,
-    sku: p.sku,
-    description: p.description ?? '',
-    price: String(p.price),
-    categoryId: p.category.id,
-  }));
+  const forms = useCrudForms<Product>(EMPTY, createProduct, updateProduct, deleteProduct, (p) => {
+    return {
+      name: p.name,
+      sku: p.sku,
+      description: p.description ?? '',
+      price: p.price.toFixed(2),
+      categoryId: p.category?.id ?? '',
+    };
+  });
 
   useEffect(() => {
     setAdmin(isAdmin());
@@ -43,7 +45,7 @@ export default function ProductsPage() {
     <main className="mx-auto max-w-4xl px-6 py-10">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-semibold">Products</h1>
-        {admin && <button onClick={() => forms.setShowCreate(true)} className="rounded-md bg-gray-900 px-4 py-2 text-sm text-white hover:bg-gray-800">New Product</button>}
+        {admin && <button onClick={() => forms.setShowCreate(true)} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm text-white hover:bg-indigo-700">New Product</button>}
       </div>
 
       <div className="mb-4">

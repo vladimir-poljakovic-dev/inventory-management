@@ -11,6 +11,7 @@ import { ProductsModule } from './products/products.module';
 import { StockModule } from './stock/stock.module';
 import { StockMovementsModule } from './stock-movements/stock-movements.module';
 import { PurchaseOrdersModule } from './purchase-orders/purchase-orders.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { PurchaseOrdersModule } from './purchase-orders/purchase-orders.module';
     StockModule,
     StockMovementsModule,
     PurchaseOrdersModule,
+    DashboardModule,
   ],
 })
 export class AppModule {}
