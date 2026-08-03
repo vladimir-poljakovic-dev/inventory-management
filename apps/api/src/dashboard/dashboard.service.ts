@@ -6,7 +6,7 @@ import { Warehouse } from '../warehouses/warehouse.entity';
 import { Supplier } from '../suppliers/supplier.entity';
 import { Stock } from '../stock/stock.entity';
 import { StockMovement } from '../stock-movements/stock-movement.entity';
-import { DashboardData } from '@repo/types';
+import type { DashboardData } from '@repo/types';
 
 
 @Injectable()
